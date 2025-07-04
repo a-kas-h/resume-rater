@@ -1,0 +1,13 @@
+prefix=/home/Akash/resume-rater/venv
+exec_prefix=/home/Akash/resume-rater/venv
+libdir=/home/Akash/resume-rater/venv/lib
+sharedlibdir=/home/Akash/resume-rater/venv/lib
+includedir=/home/Akash/resume-rater/venv/include
+
+Name: zlib
+Description: zlib compression library
+Version: 1.2.13
+
+Requires:
+Libs: -L${libdir} -L${sharedlibdir} -lz
+Cflags: -I${includedir}
