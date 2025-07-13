@@ -7,29 +7,27 @@ import os
 import base64
 import io
 from PIL import Image
-import pdf2image
+import fitz  # PyMuPDF 
 import google.generativeai as genai
 
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
 def get_gemini_response(input, pdf_content, prompt):
-    model=genai.GenerativeModel('gemini-2.5-pro')
+    model = genai.GenerativeModel('gemini-2.5-pro')
     response = model.generate_content([input, pdf_content[0], prompt])
     return response.text
 
 def input_pdf_setup(uploaded_file):
     if uploaded_file is not None:
-        images = pdf2image.convert_from_bytes(uploaded_file.read())
-        first_page = images[0]
-        
-        img_byte_array = io.BytesIO()
-        first_page.save(img_byte_array, format='JPEG')
-        img_byte_array = img_byte_array.getvalue()
+        doc = fitz.open(stream=uploaded_file.read(), filetype="pdf")
+        first_page = doc.load_page(0)
+        pix = first_page.get_pixmap(dpi=150)  # decent resolution
+        img_bytes = pix.tobytes("png")
 
         pdf_parts = [
             {
-                "mime_type": "image/jpeg",
-                "data": base64.b64encode(img_byte_array).decode(),
+                "mime_type": "image/png",
+                "data": base64.b64encode(img_bytes).decode(),
             }
         ]
         return pdf_parts

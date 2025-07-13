@@ -1,4 +1,4 @@
-#!/home/Akash/resume-rater/venv/bin/python3.10
+#!/Users/akash/Documents/github/resume-rater/venv/bin/python3.13
 # -*- coding: utf-8 -*-
 import re
 import sys
